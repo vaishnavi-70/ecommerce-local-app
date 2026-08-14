@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f9; margin: 0; padding: 20px; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .cart-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #ddd; }
+        .total { font-size: 18px; font-weight: bold; text-align: right; margin-top: 20px; }
+        button { background: #27ae60; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; width: 100%; margin-top: 20px; }
+        button:hover { background: #219653; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Your Shopping Cart</h2>
+        <div id="cartItems"></div>
+        <div class="total" id="totalAmount">Total: ₹0</div>
+        <button onclick="checkout()">Place Order</button>
+    </div>
+
+    <script>
+        function loadCart() {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            let cartContainer = document.getElementById('cartItems');
+            let totalDiv = document.getElementById('totalAmount');
+            
+            cartContainer.innerHTML = '';
+            let total = 0;
+
+            if (cart.length === 0) {
+                cartContainer.innerHTML = '<p>Your cart is empty.</p>';
+                totalDiv.innerText = 'Total: ₹0';
+                return;
+            }
+
+            cart.forEach((item, index) => {
+                total += item.price * item.quantity;
+                let div = document.createElement('div');
+                div.className = 'cart-item';
+                div.innerHTML = `
+                    <span>${item.title} (x${item.quantity})</span>
+                    <span>₹${item.price * item.quantity}</span>
+                `;
+                cartContainer.appendChild(div);
+            });
+
+            totalDiv.innerText = `Total: ₹${total}`;
+        }
+
+        function checkout() {
+            alert('Order placed successfully!');
+            localStorage.removeItem('cart');
+            window.location.href = 'index.html';
+        }
+
+        loadCart();
+    </script>
+</body>
+</html>
